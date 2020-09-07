@@ -30,13 +30,14 @@ public class Inscripcion implements Serializable {
     }
 
     public Inscripcion(boolean isExpositor, boolean isPrescencial, Persona persona, 
-            EdicionConferencia edicion, EntidadTrabajo entidad) {
+            EdicionConferencia edicion) {
         this.fechaInscripcion = LocalDate.now();
         this.isExpositor = isExpositor;
         this.isPrescencial = isPrescencial;
-        this.entidad = entidad;
+        this.entidad = persona.getEntidadTrabajo();
         this.edicion = edicion;
         this.persona = persona;
+        persona.agregarInscripcion(this);
     }
     public LocalDate getFechaInscripcion() {
         return fechaInscripcion;

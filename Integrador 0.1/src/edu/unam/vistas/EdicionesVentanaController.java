@@ -79,8 +79,8 @@ public class EdicionesVentanaController implements Initializable {
     private FXMLLoader cargador;
     private Scene scene;
     private Stage stage;
-    ObservableList<EdicionConferencia> ediciones = FXCollections.observableArrayList();
-    ObservableList<Conferencia> conferencias = FXCollections.observableArrayList();
+    private ObservableList<EdicionConferencia> ediciones = FXCollections.observableArrayList();
+    private ObservableList<Conferencia> conferencias = FXCollections.observableArrayList();
     private String textoAlerta;
 
     public EdicionesVentanaController() {
@@ -92,6 +92,9 @@ public class EdicionesVentanaController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         establecerFechas();
+        setColumns();
+        agregarEdicionesTabla();
+        agregarConferncias();
         comboConferencia.setItems(conferencias);
         this.buttonAgregar.disableProperty().bind(
                 this.tableEdiciones.getSelectionModel().selectedItemProperty().isNotNull());
@@ -126,7 +129,7 @@ public class EdicionesVentanaController implements Initializable {
                 Stage nuevaScena = (Stage) this.buttonInscripciones.getScene().getWindow();
                 nuevaScena.close();
             } catch (IOException ex) {
-                System.out.println("problemas");
+                textoAlerta = ex.toString();
             }
         }
     }
@@ -161,13 +164,16 @@ public class EdicionesVentanaController implements Initializable {
                 LocalDate fechaInicio = this.datePickerInicio.getValue();
                 LocalDate fechaFin = this.datePickerFinal.getValue();
                 this.servicio.agregarEdicion(fechaInicio, fechaInicio, conf, direccion);
-                textoAlerta = "Se actualizo con exito.";
-            }else{textoAlerta = "Complete todos los campos.";}
-            
-
+                textoAlerta = "Se agrego con exito.";
+                agregarEdicionesTabla();
+                limpiar();
+            } else {
+                textoAlerta = "Complete todos los campos.";
+            }
         } catch (Exception e) {
             textoAlerta = e.toString();
         }
+
         mostrarAlerta(textoAlerta);
     }
 
@@ -175,22 +181,27 @@ public class EdicionesVentanaController implements Initializable {
     private void handleAtualizar(ActionEvent event) {
         try {
             long id = this.tableEdiciones.getSelectionModel().getSelectedItem().getId();
-            if(!(this.comboConferencia.getSelectionModel().isEmpty()
+            if (!(this.comboConferencia.getSelectionModel().isEmpty()
                     || this.textFieldDireccion.getText().isEmpty())) {
                 Conferencia conferencia = this.comboConferencia.getSelectionModel().getSelectedItem();
                 String direccion = this.textFieldDireccion.getText();
                 LocalDate fechaInicio = this.datePickerInicio.getValue();
                 LocalDate fechaFin = this.datePickerFinal.getValue();
-                
+
                 boolean actualizar = servicio.actualizarEdicion(id,
                         fechaInicio, fechaFin, conferencia, direccion);
-                if (actualizar == true){
+                if (actualizar == true) {
                     textoAlerta = "Se actualizo con exito";
-                }else{textoAlerta = "No se puede actualizar. Complete todos los campos";
+                    agregarEdicionesTabla();
+                    limpiar();
+                } else {
+                    textoAlerta = "No se puede actualizar. Complete todos los campos";
+                }
             }
         } catch (Exception e) {
 
         }
+
     }
 
     @FXML
@@ -214,7 +225,7 @@ public class EdicionesVentanaController implements Initializable {
 
     public void limpiar() {
         comboConferencia.getSelectionModel().clearSelection();
-        textFieldDireccion.setText("");
+        textFieldDireccion.setText(null);
         tableEdiciones.getSelectionModel().clearSelection();
         establecerFechas();
     }
@@ -243,5 +254,10 @@ public class EdicionesVentanaController implements Initializable {
         this.columnInicio.setCellValueFactory(new PropertyValueFactory("fechaInicio"));
         this.columnFin.setCellValueFactory(new PropertyValueFactory("fechaFin"));
         this.columnUbicacion.setCellValueFactory(new PropertyValueFactory("direccion"));
+    }
+
+    public void agregarConferncias() {
+        conferencias.addAll(servicio.listarConferencias());
+        comboConferencia.setItems(conferencias);
     }
 }

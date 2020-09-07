@@ -15,6 +15,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -39,13 +41,14 @@ import javax.persistence.Persistence;
  * @author Ominuka Mauro
  */
 public class InscripcionesVentanaController implements Initializable {
+
     EntityManagerFactory emf = Persistence.createEntityManagerFactory("IntegradorPU");
-     Repositorio em = new Repositorio(emf);
-     Servicio servicio = new Servicio(em);
+    Repositorio em = new Repositorio(emf);
+    Servicio servicio = new Servicio(em);
     @FXML
     private TableView<Inscripcion> tableInscripciones;
     @FXML
-    private TableColumn<Inscripcion, String> columnID;
+    private TableColumn<Inscripcion, Long> columnID;
     @FXML
     private TableColumn<Inscripcion, EdicionConferencia> columnEdicion;
     @FXML
@@ -74,86 +77,151 @@ public class InscripcionesVentanaController implements Initializable {
     private ComboBox<String> comboExpositor;
     @FXML
     private ComboBox<String> comboModoAsistencia;
-    
+
     private FXMLLoader cargador;
-    private Parent root;
     private Scene scene;
     private Stage stage;
-    
-    private ObservableList<String> expositor= FXCollections.observableArrayList();
-    private ObservableList<Persona> personas= FXCollections.observableArrayList();
-    private ObservableList<EdicionConferencia> ediciones= FXCollections.observableArrayList();
-    private ObservableList<String> asistencia= FXCollections.observableArrayList();
+    private String textoAlerta;
+    private ObservableList<String> expositor = FXCollections.observableArrayList();
+    private ObservableList<Persona> personas = FXCollections.observableArrayList();
+    private ObservableList<EdicionConferencia> ediciones = FXCollections.observableArrayList();
+    private ObservableList<String> asistencia = FXCollections.observableArrayList();
     private ObservableList<Inscripcion> inscripciones = FXCollections.observableArrayList();
-    
-    
-    public InscripcionesVentanaController( ){
+
+    public InscripcionesVentanaController() {
     }
+
     /**
      * Initializes the controller class.
      */
     @Override
-    public void initialize(URL url, ResourceBundle rb) { 
-        agregarModoPrescencia();                  
-        agregarModoAsistencia();                
-        agregarPersonas();        
+    public void initialize(URL url, ResourceBundle rb) {
+        agregarModoPrescencia();
+        agregarModoAsistencia();
+        agregarPersonas();
         agregarEdiciones();
         setPropertyTabla();
         agregarDatosTabla();
-    }    
+        //deshabilitar el button de agregar cuando se selecciona un item de la tabla
+        this.buttonAgregar.disableProperty().bind(
+                this.tableInscripciones.getSelectionModel().selectedItemProperty().isNotNull());
+        this.buttonActualizar.disableProperty().bind(
+                this.tableInscripciones.getSelectionModel().selectionModeProperty().isNull());
+        this.buttonEliminar.disableProperty().bind(
+                this.tableInscripciones.getSelectionModel().selectionModeProperty().isNull());
+        this.tableInscripciones.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Inscripcion>() {
+            @Override
+            public void changed(ObservableValue<? extends Inscripcion> ov, Inscripcion viejo, Inscripcion valorNuevo) {
+                comboEdicion.setValue(valorNuevo.getEdicion());
+                comboEdicion.setDisable(true);
+                comboPersona.setValue(valorNuevo.getPersona());
+                comboPersona.setDisable(true);
+                comboExpositor.setValue(setExpositor(valorNuevo.isExpositor()));
+                comboModoAsistencia.setValue(setAsitencia(valorNuevo.isPrescencial()));
+            }
+        }
+        );
+    }
 
     @FXML
     private void handleAtras(ActionEvent event) {
         {
             try {
                 cargador = new FXMLLoader(getClass().getResource("/edu/unam/vistas/EdicionesVentana.fxml"));
-                EdicionesVentanaController controlador = cargador.getController(); 
+                EdicionesVentanaController controlador = cargador.getController();
                 scene = new Scene(cargador.load());
                 stage = new Stage();
                 stage.setScene(scene);
                 stage.setTitle("Ediciones");
                 stage.setResizable(false);
-                stage.show();               
+                stage.show();
                 Stage nuevaScena = (Stage) this.buttonAtras.getScene().getWindow();
                 nuevaScena.close();
-
             } catch (IOException ex) {
-                System.out.println("problemas");
+                textoAlerta = ex.toString();
             }
         }
     }
 
     @FXML
     private void handleAgregar(ActionEvent event) {
-        
-        
+        try {
+            if (!(comboEdicion.getSelectionModel().isEmpty()
+                    || comboPersona.getSelectionModel().isEmpty()
+                    || comboModoAsistencia.getSelectionModel().isEmpty()
+                    || comboExpositor.getSelectionModel().isEmpty())) {
+                EdicionConferencia edicion = comboEdicion.getSelectionModel().getSelectedItem();
+                Persona persona = comboPersona.getSelectionModel().getSelectedItem();
+                boolean modoAsistencia = obtenerModoAsistencia(comboModoAsistencia.getSelectionModel().getSelectedItem());
+                boolean isExpositor = obtenerExpositor(comboExpositor.getSelectionModel().getSelectedItem());
+                servicio.agregarInscripcion(isExpositor, modoAsistencia, persona, edicion);
+                limpiar();
+                textoAlerta = "Se agrego con exito";
+            }
+            textoAlerta = "Complete todos los campos.";
+
+        } catch (Exception e) {
+            textoAlerta = e.toString();
+        }
+        mostrarAlerta(textoAlerta);
+        agregarDatosTabla();
     }
 
     @FXML
     private void handleActualizar(ActionEvent event) {
+        try {
+            long id = this.tableInscripciones.getSelectionModel().getSelectedItem().getId();
+            EdicionConferencia edicion = comboEdicion.getSelectionModel().getSelectedItem();
+            Persona persona = comboPersona.getSelectionModel().getSelectedItem();
+            boolean modoAsistencia = obtenerModoAsistencia(comboModoAsistencia.getSelectionModel().getSelectedItem());
+            boolean isExpositor = obtenerExpositor(comboExpositor.getSelectionModel().getSelectedItem());
+            servicio.actualizarInscripcion(id, isExpositor, modoAsistencia, persona, edicion);
+        } catch (Exception e) {
+            textoAlerta = e.toString();
+        }
+        mostrarAlerta(textoAlerta);
+        agregarDatosTabla();
     }
 
     @FXML
     private void handleEliminar(ActionEvent event) {
+        try {
+            long id = this.tableInscripciones.getSelectionModel().getSelectedItem().getId();
+            boolean eliminar = this.servicio.eliminarInscripcion(id);
+            if (eliminar == true) {
+                textoAlerta = "Se elimino con exito";
+            } else {
+                textoAlerta = "No se puede eliminar";
+            }
+        } catch (Exception e) {
+            textoAlerta = e.toString();
+        }
+        mostrarAlerta(textoAlerta);
+        limpiar();
     }
-    
-    public void limpiar(){
+
+    public void limpiar() {
         this.comboExpositor.getSelectionModel().clearSelection();
         this.comboModoAsistencia.getSelectionModel().clearSelection();
         this.comboPersona.getSelectionModel().clearSelection();
         this.comboEdicion.getSelectionModel().clearSelection();
+        this.tableInscripciones.getSelectionModel().clearSelection();
     }
-    public void mostrarAlerta(String textoAlerta){
-        Alert alerta = new Alert(Alert.AlertType.INFORMATION);      
-        alerta.setTitle(textoAlerta);
-        alerta.show();      
+
+    public void mostrarAlerta(String textoAlerta) {
+        Alert alerta = new Alert(Alert.AlertType.INFORMATION);
+        alerta.setTitle("Informacion");
+        alerta.setHeaderText(textoAlerta);
+        alerta.show();
     }
-    public void agregarDatosTabla(){
+
+    public void agregarDatosTabla() {
         this.tableInscripciones.getItems().clear();
         this.inscripciones.addAll(servicio.listarInscripciones());
         this.tableInscripciones.setItems(inscripciones);
     }
-    public void setPropertyTabla(){
+
+    public void setPropertyTabla() {
         this.columnID.setCellValueFactory(new PropertyValueFactory("id"));
         this.columnEdicion.setCellValueFactory(new PropertyValueFactory("edicion"));
         this.columnPersona.setCellValueFactory(new PropertyValueFactory("persona"));
@@ -162,19 +230,51 @@ public class InscripcionesVentanaController implements Initializable {
         this.columnFechaInscripcion.setCellValueFactory(new PropertyValueFactory("fechaInscripcion"));
         this.columnEntidadTrabajo.setCellValueFactory(new PropertyValueFactory("entidad"));
     }
-    public void agregarModoPrescencia(){
-        expositor.addAll("Expositor","Oyente");
+
+    public void agregarModoPrescencia() {
+        expositor.addAll("Expositor", "Oyente");
         this.comboExpositor.setItems(expositor);
     }
-    public void agregarModoAsistencia(){
-        asistencia.addAll("Prescencial","Online");
+
+    public boolean obtenerExpositor(String isExpositor) {
+        if (isExpositor.equals("Expositor")) {
+            return true;
+        }
+        return false;
+    }
+
+    public String setExpositor(boolean exp) {
+        if (exp == true) {
+            return "Expositor";
+        }
+        return "Oyente";
+    }
+
+    public boolean obtenerModoAsistencia(String modo) {
+        if (modo.equals("Presencial")) {
+            return true;
+        }
+        return false;
+    }
+
+    public String setAsitencia(boolean asistencia) {
+        if (asistencia == true) {
+            return "Presencial";
+        }
+        return "Online";
+    }
+
+    public void agregarModoAsistencia() {
+        asistencia.addAll("Presencial", "Online");
         this.comboModoAsistencia.setItems(asistencia);
     }
-    public void agregarPersonas(){
+
+    public void agregarPersonas() {
         personas.addAll(servicio.listarPersonas());
         this.comboPersona.setItems(personas);
     }
-    public void agregarEdiciones(){
+
+    public void agregarEdiciones() {
         ediciones.addAll(servicio.listarEdiciones());
         this.comboEdicion.setItems(ediciones);
     }

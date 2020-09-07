@@ -70,16 +70,16 @@ public class Servicio {
             Conferencia conferencia, String direccion) {
         this.repositorio.iniciarTransaccion();
         var edicion = new EdicionConferencia(fechaInicio, fechaFin, conferencia,
-                    direccion.trim().toUpperCase().trim());       
+                direccion.trim().toUpperCase().trim());
         this.repositorio.insertar(edicion);
         this.repositorio.finalizarTransaccion();
     }
-    
+
     public boolean actualizarEdicion(long id, LocalDate fechaInicio, LocalDate fechaFin,
-            Conferencia conferencia, String direccion){
+            Conferencia conferencia, String direccion) {
         this.repositorio.iniciarTransaccion();
         EdicionConferencia edicion = this.repositorio.buscar(EdicionConferencia.class, id);
-        if (edicion != null ){
+        if (edicion != null) {
             edicion.setConferencia(conferencia);
             edicion.setDireccion(direccion.trim().toUpperCase().trim());
             edicion.setFechaInicio(fechaInicio);
@@ -91,17 +91,19 @@ public class Servicio {
         this.repositorio.rollbackTransaccion();
         return false;
     }
-    public boolean eliminarEdicion(long id){
+
+    public boolean eliminarEdicion(long id) {
         this.repositorio.iniciarTransaccion();
         EdicionConferencia edicion = this.repositorio.buscar(EdicionConferencia.class, id);
-        if(edicion != null & edicion.getInscripciones().isEmpty()){
+        if (edicion != null & edicion.getInscripciones().isEmpty()) {
             this.repositorio.eliminar(edicion);
             this.repositorio.finalizarTransaccion();
-            return true; 
+            return true;
         }
         this.repositorio.rollbackTransaccion();
         return false;
     }
+
     public List listarEntidades() {
         return this.repositorio.buscarTodos(EntidadTrabajo.class);
     }
@@ -149,11 +151,43 @@ public class Servicio {
     }
 
     public void agregarInscripcion(boolean isExpositor, boolean isPrescencial,
-            Persona persona, EntidadTrabajo entidad, EdicionConferencia edicion) {
+            Persona persona, EdicionConferencia edicion) {
         this.repositorio.iniciarTransaccion();
-        var inscripcion = new Inscripcion(isExpositor, isPrescencial, persona, edicion, entidad);
+        var inscripcion = new Inscripcion(isExpositor, isPrescencial, persona, edicion);
         this.repositorio.insertar(inscripcion);
         this.repositorio.finalizarTransaccion();
+    }
+
+    public boolean actualizarInscripcion(long id, boolean isExpositor, boolean isPrescencial,
+            Persona persona, EdicionConferencia edicion) {
+        this.repositorio.iniciarTransaccion();
+        Inscripcion inscripcion = this.repositorio.buscar(Inscripcion.class, id);
+        if (inscripcion != null) {
+            inscripcion.setEdicion(edicion);
+            inscripcion.setIsExpositor(isExpositor);
+            inscripcion.setIsPrescencial(isPrescencial);
+            inscripcion.setPersona(persona);
+            inscripcion.setEdicion(edicion);
+            this.repositorio.modificar(inscripcion);
+            this.repositorio.finalizarTransaccion();
+            return true;
+        } else {
+            this.repositorio.rollbackTransaccion();
+            return false;
+        }
+    }
+
+    public boolean eliminarInscripcion(long id) {
+        this.repositorio.iniciarTransaccion();
+        Inscripcion inscripcion = this.repositorio.buscar(Inscripcion.class, id);
+        if (inscripcion != null) {
+            this.repositorio.eliminar(inscripcion);
+            this.repositorio.finalizarTransaccion();
+            return true;
+        } else {
+            this.repositorio.rollbackTransaccion();
+        }
+        return false;
     }
 
     public Persona buscarPersona(String dni) {
