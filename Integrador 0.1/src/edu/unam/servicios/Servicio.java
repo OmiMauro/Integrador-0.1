@@ -38,8 +38,8 @@ public class Servicio {
     public boolean actualizarConferencia(String id, String nombre, String temaDebate) {
         this.repositorio.iniciarTransaccion();
         Conferencia conf = this.repositorio.buscar(Conferencia.class, id);
-        conf.setNombre(nombre.toUpperCase());
-        conf.setTemaDebate(temaDebate.toUpperCase());
+        conf.setNombre(nombre.toUpperCase().trim());
+        conf.setTemaDebate(temaDebate.toUpperCase().trim());
         this.repositorio.modificar(conf);
         this.repositorio.finalizarTransaccion();
         return true;
@@ -66,16 +66,42 @@ public class Servicio {
         return this.repositorio.buscar(EdicionConferencia.class, id);
     }
 
-    public void agregarEdicion(LocalDate inicio, LocalDate finalizacion,
-            Conferencia conferencia) {
+    public void agregarEdicion(LocalDate fechaInicio, LocalDate fechaFin,
+            Conferencia conferencia, String direccion) {
         this.repositorio.iniciarTransaccion();
-        var edicion = new EdicionConferencia(inicio, finalizacion, conferencia);
-        edicion.setFechaInicio(inicio);
-        edicion.setFechaFin(finalizacion);
+        var edicion = new EdicionConferencia(fechaInicio, fechaFin, conferencia,
+                    direccion.trim().toUpperCase().trim());       
         this.repositorio.insertar(edicion);
         this.repositorio.finalizarTransaccion();
     }
-
+    
+    public boolean actualizarEdicion(long id, LocalDate fechaInicio, LocalDate fechaFin,
+            Conferencia conferencia, String direccion){
+        this.repositorio.iniciarTransaccion();
+        EdicionConferencia edicion = this.repositorio.buscar(EdicionConferencia.class, id);
+        if (edicion != null ){
+            edicion.setConferencia(conferencia);
+            edicion.setDireccion(direccion.trim().toUpperCase().trim());
+            edicion.setFechaInicio(fechaInicio);
+            edicion.setFechaFin(fechaFin);
+            this.repositorio.modificar(edicion);
+            this.repositorio.finalizarTransaccion();
+            return true;
+        }
+        this.repositorio.rollbackTransaccion();
+        return false;
+    }
+    public boolean eliminarEdicion(long id){
+        this.repositorio.iniciarTransaccion();
+        EdicionConferencia edicion = this.repositorio.buscar(EdicionConferencia.class, id);
+        if(edicion != null & edicion.getInscripciones().isEmpty()){
+            this.repositorio.eliminar(edicion);
+            this.repositorio.finalizarTransaccion();
+            return true; 
+        }
+        this.repositorio.rollbackTransaccion();
+        return false;
+    }
     public List listarEntidades() {
         return this.repositorio.buscarTodos(EntidadTrabajo.class);
     }
@@ -86,7 +112,7 @@ public class Servicio {
 
     public void agregarEntidad(String cuit, String nombre, boolean isPublica) {
         this.repositorio.iniciarTransaccion();
-        var entidad = new EntidadTrabajo(cuit, nombre.toUpperCase(), isPublica);
+        var entidad = new EntidadTrabajo(cuit, nombre.toUpperCase().trim(), isPublica);
         this.repositorio.insertar(entidad);
         this.repositorio.finalizarTransaccion();
     }
@@ -94,7 +120,7 @@ public class Servicio {
     public void actualizarEntidad(String cuit, String nombre, boolean isPublica, EntidadTrabajo entidad) {
         this.repositorio.iniciarTransaccion();
         entidad.setCUIT(cuit);
-        entidad.setNombre(nombre.toUpperCase());
+        entidad.setNombre(nombre.toUpperCase().trim());
         entidad.setIsPublica(isPublica);
         this.repositorio.modificar(entidad);
         this.repositorio.finalizarTransaccion();
@@ -127,6 +153,7 @@ public class Servicio {
         this.repositorio.iniciarTransaccion();
         var inscripcion = new Inscripcion(isExpositor, isPrescencial, persona, edicion, entidad);
         this.repositorio.insertar(inscripcion);
+        this.repositorio.finalizarTransaccion();
     }
 
     public Persona buscarPersona(String dni) {
@@ -141,7 +168,7 @@ public class Servicio {
             LocalDate fechaNac, EntidadTrabajo entidad) {
         this.repositorio.iniciarTransaccion();
         var persona = new Persona(nombre.toUpperCase(),
-                apellido.toUpperCase(), dni.toUpperCase(), fechaNac);
+                apellido.toUpperCase().trim(), dni.toUpperCase().trim(), fechaNac);
         persona.setEntidadTrabajo(entidad);
         this.repositorio.insertar(persona);
         this.repositorio.finalizarTransaccion();
@@ -152,10 +179,10 @@ public class Servicio {
         this.repositorio.iniciarTransaccion();
         Persona per = this.repositorio.buscar(Persona.class, DNI);
         if (per != null) {
-            per.setApellido(ape.toUpperCase());
+            per.setApellido(ape.toUpperCase().trim());
             per.setfechaNacimiento(fechaNac);
             per.setEntidadTrabajo(entidad);
-            per.setNombre(nombre.toUpperCase());
+            per.setNombre(nombre.toUpperCase().trim());
             this.repositorio.modificar(per);
             this.repositorio.finalizarTransaccion();
             return true;

@@ -21,7 +21,7 @@ public class EdicionConferencia implements Serializable {
     @Id
    // @SequenceGenerator(name = "Seq_Edicion" )
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;  
+    private long id;  
     private LocalDate fechaInicio;
     private LocalDate fechaFin;    
     private Conferencia conferencia;
@@ -33,10 +33,12 @@ public class EdicionConferencia implements Serializable {
     public EdicionConferencia() {        
     }
     
-    public EdicionConferencia(LocalDate fechaInicio, LocalDate fechaFin, Conferencia conf) {
+    public EdicionConferencia(LocalDate fechaInicio, LocalDate fechaFin, Conferencia conf
+                            , String direccion) {
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;        
         this.conferencia = conf;      
+        this.direccion = direccion;
     }
     public Conferencia getConferencia() {
         return conferencia;
@@ -67,7 +69,7 @@ public class EdicionConferencia implements Serializable {
         this.fechaFin = fechaFin;
     }
     
-     public int getId() {
+     public long getId() {
         return this.id;
     }
 
@@ -89,21 +91,6 @@ public class EdicionConferencia implements Serializable {
             }  
     }
     
-    public List<Inscripcion> mostrarInscriptos(){
-        return this.inscripciones;
-    }
-    
-    public Inscripcion buscarInscripto(String dni){
-        for (Inscripcion temp : inscripciones){
-            if (temp.getPersona().getDNI().equals(dni)){
-                return temp;
-                
-            }    
-        }
-        //Si no se encontro una inscripcion asociada a ese dni 
-        return null;
-    }
-    
     public boolean eliminarInscripto(int id){
         for (Inscripcion temp : inscripciones){
             if( temp.getId() == id){
@@ -116,6 +103,22 @@ public class EdicionConferencia implements Serializable {
     @Override
     public String toString(){
         return this.id + this.conferencia.getNombre();
+    }
+
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
+    }
+
+    public List<Inscripcion> getInscripciones() {
+        return inscripciones;
+    }
+
+    public void setInscripciones(List<Inscripcion> inscripciones) {
+        this.inscripciones = inscripciones;
     }
     
 }
