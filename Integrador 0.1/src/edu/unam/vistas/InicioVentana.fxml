@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane id="AnchorPane" fx:id="anchorPane" prefHeight="563.0" prefWidth="714.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.unam.vistas.InicioVentanaController">
+   <children>
+      <BorderPane layoutY="1.0" prefHeight="555.0" prefWidth="714.0">
+         <left>
+            <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="399.0" prefWidth="163.0" BorderPane.alignment="CENTER">
+               <children>
+                  
+                  <Button fx:id="buttonConferencias" mnemonicParsing="true" onAction="#handleConferencias" prefHeight="35.0" prefWidth="160.0" text="Conferen_cias">
+                     
+                  </Button>
+                  
+                  <Button fx:id="buttonEdiciones" mnemonicParsing="true" onAction="#handleEdiciones" prefHeight="35.0" prefWidth="160.0" text="_Ediciones">
+                     
+                  </Button>
+                  <Button fx:id="buttonEntidades" mnemonicParsing="true" onAction="#handleEntidades" prefHeight="35.0" prefWidth="160.0" text="E_ntidades">
+                     
+                  </Button>
+                  <Button fx:id="buttonEstadisticas" mnemonicParsing="true" prefHeight="35.0" prefWidth="160.0" text="E_stadisticas">
+                     
+                  </Button>
+                  <Button fx:id= "buttonPersonas" mnemonicParsing="true" onAction="#handlePersonas" prefHeight="35.0" prefWidth="160.0" text="_Personas">
+                     
+                  </Button>
+               </children>
+            </VBox>
+         </left>
+         <top>
+            <VBox prefHeight="120" prefWidth="714.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Label  minWidth="-Infinity" prefHeight="100" prefWidth="714" style="-fx-padding: 20px 0px 20px 200px;" text="Sistema de Gestion de Conferencias"/>
+                          
+               </children>
+            </VBox>
+         </top>
+         <center>
+            <ImageView fitHeight="422.0" fitWidth="549.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
+               <image>
+                  <Image url="/edu/unam/imagen/conferencia1.jpg" />
+               </image>
+            </ImageView>
+         </center>
+      </BorderPane>
+   </children>
+</AnchorPane>

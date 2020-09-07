@@ -1,0 +1,64 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+class Persona{
+-  nombre  : String
+-  apellido : String
+-  DNI : String
+-  fechaNacimiento : LocalDate
+__
++ Persona() 
++ Persona(nombre : String, apellido : String, DNI : String, fechaNacimiento : LocalDate, entidad : EntidadTrabajo)
+}
+
+
+class EntidadTrabajo{
+- CUIT : String
+- nombre : String
+- isPublica : boolean
+__
++ EntidadTrabajo()
++ EntidadTrabajo(CUIT : String, nombre : String, isPublica : boolean) 
+}
+
+class Conferencia{
+- id : String
+- nombre : String 
+- temaDebate : String
+
+__
++ Conferencia()
++ Conferencia(id : String, nombre : String, temaDebate : String)
+
+}
+class EdicionConferencia{
+- direccion : String
+- fechaInicio : LocalDate
+- fechaFin : LocalDate
+- 
+__
++ EdicionConferencia() 
++ EdicionConferencia(direccion : String, fechaInicio : LocalDate,  fechaFin : LocalDate, conferencia : Conferencia)
+ 
+}
+
+class Inscripcion{
+- fechaInscripcion : LocalDate
+- isExpositor : boolean 
+- isPrescencial : boolean
+__
++ Inscripcion() 
++ Inscripcion(fechaInscripcion : LocalDate, isExpositor : boolean, isPrescencial : boolean, persona : Persona, entidad : EntidadTrabajo, edicion : EdicionConferencia)
+
+}
+
+
+Conferencia "1" *-- "*" EdicionConferencia
+EdicionConferencia "1" o-- "*" Inscripcion
+Inscripcion "*" -- "*" Persona
+Inscripcion "1" -- "1" EntidadTrabajo
+Persona "*" *-- "1" EntidadTrabajo
+
+
+@enduml
+
