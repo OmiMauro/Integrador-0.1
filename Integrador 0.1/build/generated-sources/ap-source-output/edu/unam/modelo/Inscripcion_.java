@@ -8,7 +8,7 @@ import javax.annotation.processing.Generated;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
-@Generated(value="org.eclipse.persistence.internal.jpa.modelgen.CanonicalModelProcessor", date="2020-09-07T15:53:38", comments="EclipseLink-2.7.7.v20200504-rNA")
+@Generated(value="org.eclipse.persistence.internal.jpa.modelgen.CanonicalModelProcessor", date="2020-09-12T08:48:21", comments="EclipseLink-2.7.7.v20200504-rNA")
 @StaticMetamodel(Inscripcion.class)
 public class Inscripcion_ { 
 
@@ -16,8 +16,8 @@ public class Inscripcion_ {
     public static volatile SingularAttribute<Inscripcion, Boolean> isExpositor;
     public static volatile SingularAttribute<Inscripcion, EntidadTrabajo> entidad;
     public static volatile SingularAttribute<Inscripcion, Long> id;
+    public static volatile SingularAttribute<Inscripcion, Boolean> isPresencial;
     public static volatile SingularAttribute<Inscripcion, LocalDate> fechaInscripcion;
-    public static volatile SingularAttribute<Inscripcion, Boolean> isPrescencial;
     public static volatile SingularAttribute<Inscripcion, EdicionConferencia> edicion;
 
 }

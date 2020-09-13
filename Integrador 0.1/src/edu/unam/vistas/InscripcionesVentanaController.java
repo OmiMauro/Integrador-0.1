@@ -23,7 +23,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -56,7 +55,7 @@ public class InscripcionesVentanaController implements Initializable {
     @FXML
     private TableColumn<Inscripcion, String> columnExpositor;
     @FXML
-    private TableColumn<Inscripcion, String> columnPrescencial;
+    private TableColumn<Inscripcion, String> columnPresencial;
     @FXML
     private TableColumn<Inscripcion, LocalDate> columnFechaInscripcion;
     @FXML
@@ -106,9 +105,9 @@ public class InscripcionesVentanaController implements Initializable {
         this.buttonAgregar.disableProperty().bind(
                 this.tableInscripciones.getSelectionModel().selectedItemProperty().isNotNull());
         this.buttonActualizar.disableProperty().bind(
-                this.tableInscripciones.getSelectionModel().selectionModeProperty().isNull());
+                this.tableInscripciones.getSelectionModel().selectedItemProperty().isNull());
         this.buttonEliminar.disableProperty().bind(
-                this.tableInscripciones.getSelectionModel().selectionModeProperty().isNull());
+                this.tableInscripciones.getSelectionModel().selectedItemProperty().isNull());
         this.tableInscripciones.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Inscripcion>() {
             @Override
             public void changed(ObservableValue<? extends Inscripcion> ov, Inscripcion viejo, Inscripcion valorNuevo) {
@@ -117,7 +116,7 @@ public class InscripcionesVentanaController implements Initializable {
                 comboPersona.setValue(valorNuevo.getPersona());
                 comboPersona.setDisable(true);
                 comboExpositor.setValue(setExpositor(valorNuevo.isExpositor()));
-                comboModoAsistencia.setValue(setAsitencia(valorNuevo.isPrescencial()));
+                comboModoAsistencia.setValue(setAsistencia(valorNuevo.isPresencial()));
             }
         }
         );
@@ -157,8 +156,9 @@ public class InscripcionesVentanaController implements Initializable {
                 servicio.agregarInscripcion(isExpositor, modoAsistencia, persona, edicion);
                 limpiar();
                 textoAlerta = "Se agrego con exito";
+            } else {
+                textoAlerta = "Complete todos los campos.";
             }
-            textoAlerta = "Complete todos los campos.";
 
         } catch (Exception e) {
             textoAlerta = e.toString();
@@ -176,6 +176,8 @@ public class InscripcionesVentanaController implements Initializable {
             boolean modoAsistencia = obtenerModoAsistencia(comboModoAsistencia.getSelectionModel().getSelectedItem());
             boolean isExpositor = obtenerExpositor(comboExpositor.getSelectionModel().getSelectedItem());
             servicio.actualizarInscripcion(id, isExpositor, modoAsistencia, persona, edicion);
+            textoAlerta = "Se actualizo con exito.";
+            limpiar();
         } catch (Exception e) {
             textoAlerta = e.toString();
         }
@@ -198,12 +200,15 @@ public class InscripcionesVentanaController implements Initializable {
         }
         mostrarAlerta(textoAlerta);
         limpiar();
+        agregarDatosTabla();
     }
 
     public void limpiar() {
         this.comboExpositor.getSelectionModel().clearSelection();
+        this.comboEdicion.setDisable(false);
         this.comboModoAsistencia.getSelectionModel().clearSelection();
         this.comboPersona.getSelectionModel().clearSelection();
+        this.comboPersona.setDisable(false);
         this.comboEdicion.getSelectionModel().clearSelection();
         this.tableInscripciones.getSelectionModel().clearSelection();
     }
@@ -218,6 +223,12 @@ public class InscripcionesVentanaController implements Initializable {
     public void agregarDatosTabla() {
         this.tableInscripciones.getItems().clear();
         this.inscripciones.addAll(servicio.listarInscripciones());
+        for (int i = 0; i < inscripciones.size(); i++) {
+            String exp = setExpositor(inscripciones.get(i).isExpositor());
+            columnExpositor.setText(exp);
+            String presencial = setAsistencia(inscripciones.get(i).isPresencial());
+            columnPresencial.setText(presencial);
+        }     
         this.tableInscripciones.setItems(inscripciones);
     }
 
@@ -226,9 +237,11 @@ public class InscripcionesVentanaController implements Initializable {
         this.columnEdicion.setCellValueFactory(new PropertyValueFactory("edicion"));
         this.columnPersona.setCellValueFactory(new PropertyValueFactory("persona"));
         this.columnExpositor.setCellValueFactory(new PropertyValueFactory("isExpositor"));
-        this.columnPrescencial.setCellValueFactory(new PropertyValueFactory("isPrescencial"));
+        this.columnPresencial.setCellValueFactory(new PropertyValueFactory("isPresencial"));
         this.columnFechaInscripcion.setCellValueFactory(new PropertyValueFactory("fechaInscripcion"));
         this.columnEntidadTrabajo.setCellValueFactory(new PropertyValueFactory("entidad"));
+    
+        
     }
 
     public void agregarModoPrescencia() {
@@ -257,7 +270,7 @@ public class InscripcionesVentanaController implements Initializable {
         return false;
     }
 
-    public String setAsitencia(boolean asistencia) {
+    public String setAsistencia(boolean asistencia) {
         if (asistencia == true) {
             return "Presencial";
         }

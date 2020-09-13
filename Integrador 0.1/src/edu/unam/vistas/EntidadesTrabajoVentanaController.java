@@ -11,8 +11,6 @@ import edu.unam.servicios.Servicio;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.beans.binding.Binding;
-import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -21,7 +19,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -30,7 +27,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -120,7 +116,8 @@ public class EntidadesTrabajoVentanaController implements Initializable {
                 Stage nuevaScena = (Stage) this.buttonAtras.getScene().getWindow();
                 nuevaScena.close();
             } catch (IOException ex) {
-                System.out.println("problemas");
+                textoAlerta = "Error";
+                mostrarAlerta(textoAlerta);
             }
         }
     }
@@ -137,6 +134,7 @@ public class EntidadesTrabajoVentanaController implements Initializable {
                 servicio.agregarEntidad(CUIT, nombre, sector);
                 addEntidadesTabla();
                 limpiar();
+                textoAlerta = "Se agrego con exito";
             } else {
                 textoAlerta = "Complete todos los campos";
             }
@@ -207,7 +205,7 @@ public class EntidadesTrabajoVentanaController implements Initializable {
     public void mostrarAlerta(String textoAlerta) {
         Alert alerta = new Alert(Alert.AlertType.INFORMATION);
         alerta.setTitle("Informacion");
-        alerta.setHeaderText(textoAlerta);
+        alerta.setContentText(textoAlerta);
         alerta.show();
     }
 

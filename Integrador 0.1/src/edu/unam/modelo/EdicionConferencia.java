@@ -9,10 +9,8 @@ import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
-import static javax.persistence.GenerationType.SEQUENCE;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
 /** 
     @author Ominuka Mauro
 */
@@ -75,22 +73,7 @@ public class EdicionConferencia implements Serializable {
 
     public void setId(int id) {
         this.id = id;
-    }
-    // Retorna el/los expositores que se inscribieron a una edicion. Si no encuentra, 
-    //retorna un valor null, en ese caso, quien da la conferencia?
-    public List<Inscripcion> buscarExpositores(){
-        ArrayList<Inscripcion> expositor = new ArrayList<>();
-        for(Inscripcion inscripto : inscripciones){
-            if (inscripto.isExpositor()){
-                expositor.add(inscripto);         
-            }
-        }
-        if (expositor.size() > 0){
-            return expositor;
-        } else{return null;
-            }  
-    }
-    
+    }   
     public boolean eliminarInscripto(int id){
         for (Inscripcion temp : inscripciones){
             if( temp.getId() == id){
@@ -102,7 +85,7 @@ public class EdicionConferencia implements Serializable {
     }
     @Override
     public String toString(){
-        return this.id + this.conferencia.getNombre();
+        return this.id+" " + this.conferencia.getNombre()+ " " +this.conferencia.getTemaDebate();
     }
 
     public String getDireccion() {
@@ -120,5 +103,5 @@ public class EdicionConferencia implements Serializable {
     public void setInscripciones(List<Inscripcion> inscripciones) {
         this.inscripciones = inscripciones;
     }
-    
+ 
 }

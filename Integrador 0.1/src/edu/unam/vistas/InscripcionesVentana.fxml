@@ -28,7 +28,7 @@
                   <TableColumn fx:id="columnEdicion" prefWidth="123.0" text="Edicion" />
                   <TableColumn fx:id="columnPersona" prefWidth="113.0" text="Persona" />
                   <TableColumn fx:id="columnExpositor" prefWidth="93.0" text="Expositor" />
-                  <TableColumn fx:id="columnPrescencial" prefWidth="115.0" text="Prescencial" />
+                  <TableColumn fx:id="columnPresencial" prefWidth="115.0" text="Presencial" />
                   <TableColumn fx:id="columnFechaInscripcion" prefWidth="108.0" text="F.Inscripcion" />
                   <TableColumn fx:id="columnEntidadTrabajo" prefWidth="109.0" text="Entidad T." />
                </columns>

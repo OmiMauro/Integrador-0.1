@@ -42,6 +42,7 @@
       <Button fx:id="buttonAtras" layoutX="639.0" layoutY="522.0" mnemonicParsing="false" onAction="#buttonAtras" prefHeight="23.0" prefWidth="109.0" text="Atras" />
       <VBox layoutX="543.0" layoutY="364.0" prefHeight="130.0" prefWidth="199.0">
          <children>
+            <Button fx:id="buttonNuevo" mnemonicParsing="false" onAction="#limpiar" prefHeight="30.0" prefWidth="199.0" text="Nuevo" />
             <Button fx:id="buttonAgregar" mnemonicParsing="false" onAction="#handleAgregar" prefHeight="33.0" prefWidth="208.0" text="Agregar" />
             <Button fx:id="buttonActualizar" mnemonicParsing="false" onAction="#handleAtualizar" prefHeight="33.0" prefWidth="205.0" text="Actualizar" />
             <Button fx:id="buttonEliminar" mnemonicParsing="false" onAction="#handleEliminar" prefHeight="37.0" prefWidth="198.0" text="Eliminar" />

@@ -158,27 +158,24 @@ public class PersonasVentanaController implements Initializable {
         try {
             if (!(textFieldApellido.getText().isEmpty()
                     || textFieldNombre.getText().isEmpty()
-                    || comboEntidad.getSelectionModel().isEmpty()
-                    || (datePickerFechaNac.getValue() != null))) {
+                    || comboEntidad.getSelectionModel().isEmpty())) {
                 String nombre = this.textFieldNombre.getText();
                 String apellido = this.textFieldApellido.getText();
                 LocalDate fechaNac = this.datePickerFechaNac.getValue();
                 EntidadTrabajo entidad = this.comboEntidad.getValue();
-                String DNI = this.tablePersona.getSelectionModel().getSelectedItem().getDNI();
-                limpiar();
+                String DNI = this.tablePersona.getSelectionModel().getSelectedItem().getDNI();               
                 boolean actualizar = servicio.actualizarPersona(DNI, nombre, apellido, fechaNac, entidad);
                 if (actualizar == true) {
-                    this.tablePersona.refresh();
-                    limpiar();
-                    textoAlerta = "Se actualizo con exito";
-                    addPersonas();
+                    addPersonas();                 
+                    textoAlerta = "Se actualizo con exito";                    
                 } else {
                     textoAlerta = "No se puede actualizar";
                 }
             }
         } catch (Exception e) {
-
+            textoAlerta = e.toString();
         }
+        limpiar();
         mostrarAlerta(textoAlerta);
     }
 

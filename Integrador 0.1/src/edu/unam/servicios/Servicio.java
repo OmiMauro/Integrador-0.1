@@ -165,7 +165,7 @@ public class Servicio {
         if (inscripcion != null) {
             inscripcion.setEdicion(edicion);
             inscripcion.setIsExpositor(isExpositor);
-            inscripcion.setIsPrescencial(isPrescencial);
+            inscripcion.setIsPresencial(isPrescencial);
             inscripcion.setPersona(persona);
             inscripcion.setEdicion(edicion);
             this.repositorio.modificar(inscripcion);

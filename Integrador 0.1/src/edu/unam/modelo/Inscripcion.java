@@ -22,18 +22,18 @@ public class Inscripcion implements Serializable {
     private long id;    
     private LocalDate fechaInscripcion;
     private boolean isExpositor;
-    private boolean isPrescencial;    
+    private boolean isPresencial;    
     private Persona persona;
     private EdicionConferencia edicion;
     private EntidadTrabajo entidad;
     public Inscripcion() {
     }
 
-    public Inscripcion(boolean isExpositor, boolean isPrescencial, Persona persona, 
+    public Inscripcion(boolean isExpositor, boolean isPresencial, Persona persona, 
             EdicionConferencia edicion) {
         this.fechaInscripcion = LocalDate.now();
         this.isExpositor = isExpositor;
-        this.isPrescencial = isPrescencial;
+        this.isPresencial = isPresencial;
         this.entidad = persona.getEntidadTrabajo();
         this.edicion = edicion;
         this.persona = persona;
@@ -55,12 +55,12 @@ public class Inscripcion implements Serializable {
         this.isExpositor = isExpositor;
     }
 
-    public boolean isPrescencial() {
-        return isPrescencial;
+    public boolean isPresencial() {
+        return isPresencial;
     }
 
-    public void setIsPrescencial(boolean isPrescencial) {
-        this.isPrescencial = isPrescencial;
+    public void setIsPresencial(boolean isPresencial) {
+        this.isPresencial = isPresencial;
     }
     
     public Persona getPersona(){
@@ -93,4 +93,17 @@ public class Inscripcion implements Serializable {
     public void setEntidad(EntidadTrabajo entidad) {
         this.entidad = entidad;
     }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public boolean isIsExpositor() {
+        return isExpositor;
+    }
+
+    public boolean isIsPresencial() {
+        return isPresencial;
+    }
+    
 }

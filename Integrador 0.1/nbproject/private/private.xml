@@ -3,10 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/media/debian/Disco/Analista%20en%20Sistemas/2020/OOP/Integrador%20V%200.1/Integrador%200.1/src/edu/unam/vistas/EdicionesVentanaController.java</file>
-            <file>file:/media/debian/Disco/Analista%20en%20Sistemas/2020/OOP/Integrador%20V%200.1/Integrador%200.1/src/edu/unam/vistas/InscripcionesVentanaController.java</file>
-            <file>file:/media/debian/Disco/Analista%20en%20Sistemas/2020/OOP/Integrador%20V%200.1/Integrador%200.1/src/edu/unam/modelo/Inscripcion.java</file>
-            <file>file:/media/debian/Disco/Analista%20en%20Sistemas/2020/OOP/Integrador%20V%200.1/Integrador%200.1/src/edu/unam/servicios/Servicio.java</file>
+            <file>file:/media/debian/Disco/Analista%20en%20Sistemas/2020/1er%20Cuatrimestre/OOP%201/Integrador%20V%200.1/Integrador%200.1/src/edu/unam/vistas/InscripcionesVentanaController.java</file>
+            <file>file:/media/debian/Disco/Analista%20en%20Sistemas/2020/1er%20Cuatrimestre/OOP%201/Integrador%20V%200.1/Integrador%200.1/src/edu/unam/vistas/PersonasVentanaController.java</file>
+            <file>file:/media/debian/Disco/Analista%20en%20Sistemas/2020/1er%20Cuatrimestre/OOP%201/Integrador%20V%200.1/Integrador%200.1/src/edu/unam/servicios/Servicio.java</file>
+            <file>file:/media/debian/Disco/Analista%20en%20Sistemas/2020/1er%20Cuatrimestre/OOP%201/Integrador%20V%200.1/Integrador%200.1/src/edu/unam/repositorio/Repositorio.java</file>
         </group>
     </open-files>
 </project-private>
