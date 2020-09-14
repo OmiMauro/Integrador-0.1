@@ -8,7 +8,7 @@ import javax.annotation.processing.Generated;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
-@Generated(value="org.eclipse.persistence.internal.jpa.modelgen.CanonicalModelProcessor", date="2020-09-12T08:48:21", comments="EclipseLink-2.7.7.v20200504-rNA")
+@Generated(value="org.eclipse.persistence.internal.jpa.modelgen.CanonicalModelProcessor", date="2020-09-14T15:46:19", comments="EclipseLink-2.7.7.v20200504-rNA")
 @StaticMetamodel(Inscripcion.class)
 public class Inscripcion_ { 
 

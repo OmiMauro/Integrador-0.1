@@ -141,6 +141,30 @@ public class InicioVentanaController implements Initializable {
 
         }
     }
+    
+    @FXML
+    private void handleEstadisticas(ActionEvent event) {
+        {
+            try {
+                cargador = new FXMLLoader(getClass().getResource("/edu/unam/vistas/EstadisticasVentana.fxml"));
+                 
+                EstadisticasVentanaController controlador = cargador.getController();
+                scene = new Scene(cargador.load());
+                stage = new Stage();
+                stage.setScene(scene);
+                stage.setTitle("Estadisticas");
+                stage.setResizable(false);
+                stage.show();
+                
+                Stage nuevaScena = (Stage) this.buttonEstadisticas.getScene().getWindow();
+                nuevaScena.close();
+
+            } catch (IOException ex) {
+                System.out.println("problemas");
+            }
+
+        }
+    }
 
     public void cerrarVentana() {
     }    
