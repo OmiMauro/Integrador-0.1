@@ -7,13 +7,6 @@
 
 <AnchorPane id="AnchorPane" prefHeight="526.0" prefWidth="711.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.unam.vistas.EstadisticasVentanaController">
    <children>
-      <BarChart fx:id="barChart" layoutY="72.0" legendSide="LEFT" prefHeight="418.0" prefWidth="711.0" title="Asistentes por Edicioon">
-        <xAxis>
-          <CategoryAxis label="Ediciones" side="BOTTOM" fx:id="xAxis" />
-        </xAxis>
-        <yAxis>
-          <NumberAxis fx:id="yAxis" label="Asistentes" side="LEFT" />
-        </yAxis>
-      </BarChart>
+      
    </children>
 </AnchorPane>

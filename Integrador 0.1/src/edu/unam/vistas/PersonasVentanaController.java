@@ -163,11 +163,11 @@ public class PersonasVentanaController implements Initializable {
                 String apellido = this.textFieldApellido.getText();
                 LocalDate fechaNac = this.datePickerFechaNac.getValue();
                 EntidadTrabajo entidad = this.comboEntidad.getValue();
-                String DNI = this.tablePersona.getSelectionModel().getSelectedItem().getDNI();               
+                String DNI = this.tablePersona.getSelectionModel().getSelectedItem().getDNI();
                 boolean actualizar = servicio.actualizarPersona(DNI, nombre, apellido, fechaNac, entidad);
                 if (actualizar == true) {
-                    addPersonas();                 
-                    textoAlerta = "Se actualizo con exito";                    
+                    addPersonas();
+                    textoAlerta = "Se actualizo con exito";
                 } else {
                     textoAlerta = "No se puede actualizar";
                 }
@@ -229,7 +229,6 @@ public class PersonasVentanaController implements Initializable {
     }
 
     public void agregarEntidad() {
-        entidades.add(null);
         entidades.addAll(servicio.listarEntidades());
         this.comboEntidad.setItems(entidades);
     }

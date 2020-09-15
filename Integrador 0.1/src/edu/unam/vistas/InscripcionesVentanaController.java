@@ -223,12 +223,7 @@ public class InscripcionesVentanaController implements Initializable {
     public void agregarDatosTabla() {
         this.tableInscripciones.getItems().clear();
         this.inscripciones.addAll(servicio.listarInscripciones());
-        for (int i = 0; i < inscripciones.size(); i++) {
-            String exp = setExpositor(inscripciones.get(i).isExpositor());
-            columnExpositor.setText(exp);
-            String presencial = setAsistencia(inscripciones.get(i).isPresencial());
-            columnPresencial.setText(presencial);
-        }     
+           
         this.tableInscripciones.setItems(inscripciones);
     }
 

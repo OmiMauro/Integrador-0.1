@@ -89,6 +89,6 @@ public class EntidadTrabajo implements Serializable {
     
     @Override
     public String toString(){
-        return this.CUIT + "-"+ this.nombre;
+        return this.nombre;
     }
 }

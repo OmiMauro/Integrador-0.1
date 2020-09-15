@@ -26,7 +26,7 @@
                   <Button fx:id="buttonEntidades" mnemonicParsing="true" onAction="#handleEntidades" prefHeight="35.0" prefWidth="160.0" text="E_ntidades">
                      
                   </Button>
-                  <Button fx:id="buttonEstadisticas" mnemonicParsing="true" prefHeight="35.0" prefWidth="160.0" text="E_stadisticas" onAction="#handleEstadisticas">
+                  <Button fx:id="buttonEstadisticas" mnemonicParsing="true" prefHeight="35.0" prefWidth="160.0" text="E_stadisticas" >
                      
                   </Button>
                   <Button fx:id= "buttonPersonas" mnemonicParsing="true" onAction="#handlePersonas" prefHeight="35.0" prefWidth="160.0" text="_Personas">
